@@ -8,42 +8,37 @@ import dotenv from "dotenv";
 import { token } from "morgan";
 dotenv.config(); // Load .env file
 
-
 const router = express.Router();
 
 // Route to create a new user
 router.post("/create-user", async (req, res) => {
   try {
-    // const { email, password, role } = req.body;
     const { name, course, batch, days, email, password, role } = req.body;
 
-    // Input validation (you may need more detailed validation)
     if (!name || !course || !batch || !days || !email || !password || !role) {
-      return res.status(400).json({ message: "Please provide all required fields." });
+      return res
+        .status(400)
+        .json({ message: "Please provide all required fields." });
     }
 
     const hashpassword = bcrypt.hashSync(password, 10);
 
-     // Create a new user document with all fields
-     const newUser = new User({
-        name,
-        course,
-        batch,
-        days,
-        email,
-        password: hashpassword,
-        role,
-      });
+    const newUser = new User({
+      name,
+      course,
+      batch,
+      days,
+      email,
+      password: hashpassword,
+      role,
+    });
 
-    // Save the user to the database
-    const savedUser = await newUser.save();
-    res
-      .status(201)
-      .json({
-        message: "User created successfully",
-        status: "201",
-        user: savedUser,
-      });
+    const savedUser = await newUser.save(); // Save the user to the database
+    res.status(201).json({
+      message: "User created successfully",
+      status: "201",
+      user: savedUser,
+    });
   } catch (error) {
     console.error("Error creating user:", error);
     res
@@ -51,8 +46,6 @@ router.post("/create-user", async (req, res) => {
       .json({ message: "Error creating user", error: error.message });
   }
 });
-
-
 
 // signup feild
 // router.post("/signup", async (req,res)=>{
@@ -88,26 +81,6 @@ router.post("/create-user", async (req, res) => {
 //   }
 // })
 
-
-
-// router.get("/get-users", verifyToken, async (req, res) => {
-// router.get("/get-users", async (req, res) => {
-
-//   try {
-//     const allUserData = await User.find();
-//     res
-//       .status(200)
-//       .json({ message: "All users data", status: "200", users: allUserData });
-//   } catch (error) {
-//     console.error("Error getting users:", error);
-//     res
-//       .status(500)
-//       .json({ message: "Error getting users", error: error.message });
-//   }
-// });
-
-
-
 // router.delete("/:id", async (req, res) => {
 //   try {
 //     const { id } = req.params;
@@ -126,8 +99,6 @@ router.post("/create-user", async (req, res) => {
 //       .json({ message: "Error deleting user", error: error.message });
 //   }
 // });
-
-
 
 // router.put("/:id", async (req, res) => {
 //   try {
@@ -148,112 +119,89 @@ router.post("/create-user", async (req, res) => {
 //   }
 // });
 
+// Route to login a user
+router.post("/login", async (req, res) => {
+  try {
+    const { email: currentUserEmail, password: currentUserPassword } = req.body;
 
+    // Validate input
+    if (!currentUserEmail || !currentUserPassword) {
+      return res
+        .status(400)
+        .json({ message: "Both Email and password are required", status: 400 });
+    }
 
-// SIGNIN FEILD
+    // Find the user in the database
+    const user = await User.findOne({ email: currentUserEmail }).lean();
+    if (!user) {
+      return res.status(404).json({ message: "User not found", status: 404 });
+    }
 
-// router.post("/login", async (req, res) => {
-//   try {
-//     const { email: currentUserEmail, password: currentUserPassword } = req.body;
+    // Compare the provided password with the hashed password in the database
+    const isPasswordValid = await bcrypt.compare(
+      currentUserPassword,
+      user.password
+    );
 
-//     // Validate input
-//     if (!currentUserEmail || !currentUserPassword) {
-//       return res.status(400).json({ message: "Email and password are required", status: 400 });
-//     }
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid password", status: 401 });
+    }
 
-//     // Find the user in the database
-//     const user = await User.findOne({ email: currentUserEmail }).lean();
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found", status: 404 });
-//     }
+    // Generating token
+    var token = jwt.sign(user, process.env.JWT_SECRET);
+    // console.log(token);
 
-//     // Compare the provided password with the hashed password in the database
-//     const isPasswordValid = await bcrypt.compare(currentUserPassword, user.password);
+    return res.status(200).json({
+      message: "User login successfully!",
+      status: 200,
+      user: { user, token },
+    });
+  } catch (error) {
+    console.error("Error logging in user:", error);
+    return res.status(500).json({
+      message: "Error logging in user",
+      status: 500,
+      error: error.message,
+    });
+  }
+});
 
-//     if (!isPasswordValid) {
-//       return res.status(401).json({ message: "Invalid password", status: 401 });
-//     }
+// Route to get current user info
+router.get("/currentUserInfo", verifyToken, async (req, res) => {
+  // router.get("/currentUserInfo", async (req, res) => {
 
-//     // Exclude sensitive information from the response
-//     const { password, ...userData } = user._doc;
+  try {
+    // console.log(req.user.email);
 
-//     return res.status(200).json({
-//       message: "User logged in successfully",
-//       status: 200,
-//       user: userData,
-//     });
-//   } catch (error) {
-//     console.error("Error logging in user:", error);
-//     return res.status(500).json({ message: "Error logging in user", status: 500, error: error.message });
-//   }
-// });
+    const currentUser = await User.findById(req.user._id);
+    console.log(currentUser);
 
-// router.post("/login", async (req, res) => {
-//   try {
-//     const { email: currentUserEmail, password: currentUserPassword } = req.body;
+    res.status(200).json({
+      message: "Current user data",
+      status: "200",
+      users: currentUser,
+    });
+  } catch (error) {
+    console.error("Not FOUND", error);
+    res
+      .status(500)
+      .json({ message: "Error getting users", error: error.message });
+  }
+});
 
-//     // Validate input
-//     if (!currentUserEmail || !currentUserPassword) {
-//       return res
-//         .status(400)
-//         .json({ message: "Both Email and password are required", status: 400 });
-//     }
-
-//     // Find the user in the database
-//     const user = await User.findOne({ email: currentUserEmail }).lean();
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found", status: 404 });
-//     }
-
-//     // Compare the provided password with the hashed password in the database
-//     const isPasswordValid = await bcrypt.compare(currentUserPassword,user.password);
-
-//     if (!isPasswordValid) {
-//       return res.status(401).json({ message: "Invalid password", status: 401 });
-//     }
-
-//     // Generating token
-//     var token = jwt.sign(user, process.env.JWT_SECRET);
-//     // console.log(token);
-
-//     return res.status(200).json({
-//       message: "User login successfully!",
-//       status: 200,
-//       user: { user, token },
-//     });
-//   } catch (error) {
-//     console.error("Error logging in user:", error);
-//     return res
-//       .status(500)
-//       .json({
-//         message: "Error logging in user",
-//         status: 500,
-//         error: error.message,
-//       });
-//   }
-// });
-
-
-// get current user info
-// router.get("/currentUserInfo", verifyToken, async (req, res) => {
-//   // router.get("/currentUserInfo", async (req, res) => {
-
-//     try {
-//       // console.log(req.user.email);
-      
-//       const currentUser = await User.findById(req.user._id);
-//       console.log(currentUser);
-      
-//       res
-//         .status(200)
-//         .json({ message: "Current user data", status: "200", users: currentUser });
-//     } 
-//     catch (error) {
-//       console.error("Not FOUND", error);
-//       res
-//         .status(500)
-//         .json({ message: "Error getting users", error: error.message });
-//     }
-//   });
+//Route to get All Users data
+router.get("/get-users", async (req, res) => {
+  try {
+    const allUserData = await User.find();
+    res
+      .status(200)
+      .json({ message: "All users data", status: "200", users: allUserData });
+  } catch (error) {
+    console.error("Error getting users:", error);
+    res
+      .status(500)
+      .json({ message: "Error getting users", error: error.message });
+  }
+});
 
 export default router;

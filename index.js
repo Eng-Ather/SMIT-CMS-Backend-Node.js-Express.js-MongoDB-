@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
 
 // app routes
 
-app.use("/api", router);    // Mount the user routes to the /api endpoint
+app.use("/user", router);    // Mount the user routes to the /api endpoint
 
 
 
