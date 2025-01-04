@@ -14,6 +14,11 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
 
+  courseId:{
+    type: String,
+    required: true,
+  },
+
   batch: {
     type: String,
     required: true,

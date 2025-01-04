@@ -1,9 +1,11 @@
 import express from "express";
 import mongoose from "./connection/dbconnection.js";
 import router from "./Routes/routes.js";
-import dotenv from "dotenv";
+import courseRoutes from "./Routes/courseRoute.js";
 import morgan from "morgan";
 import cors from "cors";
+
+import dotenv from "dotenv";
 dotenv.config(); // Load .env file
 
 const app = express();
@@ -37,7 +39,7 @@ app.get("/", (req, res) => {
 
 app.use("/user", router);    // Mount the user routes to the /api endpoint
 
-
+app.use("/course", courseRoutes);
 
 
 

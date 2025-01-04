@@ -13,7 +13,7 @@ const router = express.Router();
 // Route to create a new user
 router.post("/create-user", async (req, res) => {
   try {
-    const { name, course, batch, days, email, password, role } = req.body;
+    const { name, course, courseId ,batch, days, email, password, role } = req.body;
 
     if (!name || !course || !batch || !days || !email || !password || !role) {
       return res
@@ -26,6 +26,7 @@ router.post("/create-user", async (req, res) => {
     const newUser = new User({
       name,
       course,
+      courseId,
       batch,
       days,
       email,
