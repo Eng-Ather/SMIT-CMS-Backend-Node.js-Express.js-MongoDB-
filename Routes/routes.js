@@ -3,7 +3,7 @@ import express from "express";
 import User from "../models/userSchema.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import verifyToken from "../tokenVerification.js";
+import verifyToken from "../middlewares/tokenVerification.js";
 import dotenv from "dotenv";
 import { token } from "morgan";
 dotenv.config(); // Load .env file
@@ -13,7 +13,8 @@ const router = express.Router();
 // Route to create a new user
 router.post("/create-user", async (req, res) => {
   try {
-    const { name, course, courseId ,batch, days, email, password, role } = req.body;
+    const { name, course, courseId, batch, days, email, password, role } =
+      req.body;
 
     if (!name || !course || !batch || !days || !email || !password || !role) {
       return res

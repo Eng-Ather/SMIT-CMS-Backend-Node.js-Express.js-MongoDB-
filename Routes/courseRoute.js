@@ -1,7 +1,7 @@
 
 import express from 'express';
 import newCourse from "../models/courseSchema.js";
-import verifyToken from "../tokenVerification.js";
+import verifyToken from "../middlewares/tokenVerification.js";
 
 
 const courseRoutes = express.Router();
