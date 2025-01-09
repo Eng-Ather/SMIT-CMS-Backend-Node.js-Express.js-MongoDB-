@@ -138,7 +138,14 @@ const userSchema = new mongoose.Schema(
     days: {
       type: [String],
       required: true,
-      enum: ["MWF", "TTS", "Weekend", "Sunday"],
+        validate:{
+          validator: function (value){
+            if(this.role ==="student") return value.length ===1
+            if( this.role === "teacher") return value.length >=1
+            return true; // For admin or other roles, no validation
+          },
+          message: "Invalid batch: Students must have 1 batch, teachers can have multiple.",
+      }
     },
 
     sectionId: {

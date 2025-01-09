@@ -71,10 +71,10 @@ courseRoutes.get("/course-outline/:courseId", async (req, res) => {
 //route to update covered Tpics
 courseRoutes.post("/cover-topics", async (req, res) => {
   try {
-    const { teacherId, batch, courseId, sectionId, coveredTopic } = req.body;
+    const { teacherId, batch, courseId, days, sectionId, coveredTopic } = req.body;
 
     // Validate request body
-    if (!teacherId || !batch || !courseId || !sectionId || !coveredTopic) {
+    if (!teacherId || !batch || !courseId || !days || !sectionId || !coveredTopic) {
       return res.status(400).json({
         message: "Please provide all required fields.",
       });
@@ -85,6 +85,7 @@ courseRoutes.post("/cover-topics", async (req, res) => {
       teacherId,
       batch,
       courseId,
+      days,
       sectionId,
       coveredTopic,
     });
