@@ -11,9 +11,9 @@ dotenv.config(); // Load .env file
 
 const app = express();
 const port = 5000;
+
 // app.use(middleware);
 app.use(cors()); // Enable CORS for all routes
-
 app.use(express.json()); // This will allow us to handle JSON bodies
 
 // for mongo db connection
@@ -31,9 +31,7 @@ app.get("/", (req, res) => {
 });
 
 // app routes
-
-app.use("/user", router); // Mount the user routes to the /api endpoint
-
+app.use("/user", router); 
 app.use("/course", courseRoutes);
 app.use("/admin", adminRoutes);
 
