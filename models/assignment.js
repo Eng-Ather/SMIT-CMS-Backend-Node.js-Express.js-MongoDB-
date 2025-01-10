@@ -20,7 +20,7 @@ const newAssignmentSchema = new mongoose.Schema(
     },
 
     days: {
-      type: [String],
+      type: String,
       required: true,
     },
 

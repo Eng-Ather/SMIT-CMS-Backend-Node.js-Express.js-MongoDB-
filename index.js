@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "./connection/dbconnection.js";
 import router from "./Routes/routes.js";
 import courseRoutes from "./Routes/courseRoute.js";
+import assignmentRoutes from "./Routes/assigmentRoutes.js";
 import morgan from "morgan";
 import cors from "cors";
 
@@ -34,6 +35,7 @@ app.get("/", (req, res) => {
 app.use("/user", router); 
 app.use("/course", courseRoutes);
 app.use("/admin", adminRoutes);
+app.use("/assignment", assignmentRoutes )
 
 app.listen(port, () => {
   console.log("Server is running on port:", port);
