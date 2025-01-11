@@ -15,7 +15,10 @@ router.post("/create-user", async (req, res) => {
   try {
     // const { name, course, courseId, batch, days, email, password, role } = req.body;
 
-    
+
+    // const { name, email, password, role course, courseId, batch, days,   } =
+    //   req.body;
+
     const {name,email,password,role,teacherId,userId,batch,course,courseId,days,sectionId} = req.body;
 
     if (role === "teacher") {

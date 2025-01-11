@@ -10,7 +10,6 @@ const coveredTopicSchema = new mongoose.Schema(
     days: {
       type: [String],
       required: true,
-      enum: ["MWF", "TTS", "Weekend", "Sunday"],
     },
     sectionId: { type: String, required: true },
     coveredTopic: { type: String, required: true },
