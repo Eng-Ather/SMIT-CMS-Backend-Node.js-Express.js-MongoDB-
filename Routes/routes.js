@@ -13,25 +13,43 @@ const router = express.Router();
 // Route to create a new user
 router.post("/create-user", async (req, res) => {
   try {
+    // const { name, course, courseId, batch, days, email, password, role } = req.body;
 
-    const { name, course, courseId, batch, days, email, password, role } =
-      req.body;
+    
     const {name,email,password,role,teacherId,userId,batch,course,courseId,days,sectionId} = req.body;
 
-
-    if(role === "teacher"){
-      if (!name || !email || !password || !role || !userId|| !batch || !course || !courseId || !days || !sectionId) {
-        return res
-        .status(400)
-        .json({ message: "Please provide all fields." });
+    if (role === "teacher") {
+      if (
+        !name ||
+        !email ||
+        !password ||
+        !role ||
+        !userId ||
+        !batch ||
+        !course ||
+        !courseId ||
+        !days ||
+        !sectionId
+      ) {
+        return res.status(400).json({ message: "Please provide all fields." });
       }
     }
 
-    if(role === "student"){
-      if (!name || !email || !password || !role || !teacherId || !userId|| !batch || !course || !courseId || !days || !sectionId) {
-       return res
-        .status(400)
-        .json({ message: "Please provide all fields." });
+    if (role === "student") {
+      if (
+        !name ||
+        !email ||
+        !password ||
+        !role ||
+        !teacherId ||
+        !userId ||
+        !batch ||
+        !course ||
+        !courseId ||
+        !days ||
+        !sectionId
+      ) {
+        return res.status(400).json({ message: "Please provide all fields." });
       }
     }
 
@@ -39,7 +57,8 @@ router.post("/create-user", async (req, res) => {
 
     let newUser;
 
-    if (role === "student") {         //if user is teacher
+    if (role === "student") {
+      //if user is teacher
       newUser = new User({
         name,
         email,
@@ -51,10 +70,10 @@ router.post("/create-user", async (req, res) => {
         course,
         courseId,
         days,
-        sectionId
+        sectionId,
       });
-    } 
-    else if (role === "teacher") {     //if user is teacher
+    } else if (role === "teacher") {
+      //if user is teacher
       newUser = new User({
         name,
         email,
@@ -65,7 +84,7 @@ router.post("/create-user", async (req, res) => {
         course,
         courseId,
         days,
-        sectionId
+        sectionId,
       });
     }
 

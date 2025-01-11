@@ -44,7 +44,7 @@
 //     required: true,
 //   },
 // },
-//   { 
+//   {
 //     timestamps: true, // Automatically add createdAt and updatedAt fields
 //   }
 // );
@@ -57,7 +57,6 @@
 // const User = mongoose.models.userinfo || mongoose.model("userinfo", userSchema);
 // export default User;
 // -----------------------------------------------------------------------------------
-
 
 import mongoose from "mongoose";
 
@@ -85,9 +84,9 @@ const userSchema = new mongoose.Schema(
     // Only for students
     teacherId: {
       type: String,
-      required: function() {
-        return this.role === "student"; 
-      }
+      required: function () {
+        return this.role === "student";
+      },
     },
 
     userId: {
@@ -98,40 +97,46 @@ const userSchema = new mongoose.Schema(
     batch: {
       type: [String],
       required: true,
-        validate:{
-          validator: function (value){
-            if(this.role ==="student") return value.length ===1
-            if( this.role === "teacher") return value.length >=1
-            return true; // For admin or other roles, no validation
-          },
-          message: "Invalid batch: Students must have 1 batch, teachers can have multiple.",
-      }
+      validate: {
+        validator: function (value) {
+          if (this.role === "student") return value.length === 1;
+          if (this.role === "teacher") return value.length >= 1;
+          return true; // For admin or other roles, no validation
+        },
+        message:
+          "Invalid batch: Students must have 1 batch, teachers can have multiple.",
+      },
     },
-    
+
     course: {
       type: [String],
       required: true,
-      validate:{
-        validator: function (value){
-          if(this.role ==="student"){ return value.length ===1}
-          if( this.role === "teacher"){ return value.length >=1}
-          return true; // For admin or other roles, no validation
-        },
-        message: "Invalid course : Students must have 1 course, teachers can have multiple.",
-      }
-    },
-    
-    courseId: {
-      type: [String], 
-      required: true, 
       validate: {
         validator: function (value) {
-          if (this.role === "student") return value.length === 1
-          if (this.role === "teacher") return value.length >= 1
+          if (this.role === "student") {
+            return value.length === 1;
+          }
+          if (this.role === "teacher") {
+            return value.length >= 1;
+          }
           return true; // For admin or other roles, no validation
         },
-        message: "Invalid course ID: Students must have 1 course ID, teachers can have multiple.",
-       
+        message:
+          "Invalid course : Students must have 1 course, teachers can have multiple.",
+      },
+    },
+
+    courseId: {
+      type: [String],
+      required: true,
+      validate: {
+        validator: function (value) {
+          if (this.role === "student") return value.length === 1;
+          if (this.role === "teacher") return value.length >= 1;
+          return true; // For admin or other roles, no validation
+        },
+        message:
+          "Invalid course ID: Students must have 1 course ID, teachers can have multiple.",
       },
     },
 
@@ -144,14 +149,15 @@ const userSchema = new mongoose.Schema(
     sectionId: {
       type: [String],
       required: true,
-      validate:{
-        validator: function (value){
-          if(this.role ==="student") return value.length ===1
-          if( this.role === "teacher") return value.length >=1
+      validate: {
+        validator: function (value) {
+          if (this.role === "student") return value.length === 1;
+          if (this.role === "teacher") return value.length >= 1;
           return true; // For admin or other roles, no validation
         },
-        message: "Invalid Section: Students must have 1 section, teachers can have multiple.",
-    }
+        message:
+          "Invalid Section: Students must have 1 section, teachers can have multiple.",
+      },
     },
   },
 

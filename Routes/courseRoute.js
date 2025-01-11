@@ -2,7 +2,6 @@ import express from "express";
 import newCourse from "../models/courseSchema.js";
 import verifyToken from "../middlewares/tokenVerification.js";
 import RecentlycoveredTopics from "../models/updateCourseOutlineSchema.js";
-import verifyToken from "../tokenVerification.js";
 
 const courseRoutes = express.Router();
 
@@ -114,7 +113,7 @@ courseRoutes.get(
       const { courseId, teacherId, sectionId, days } = req.params; // Use req.params for route params
 
       // Validate request parameters
-      if (!courseId || !teacherId || !sectionId || !days ) {
+      if (!courseId || !teacherId || !sectionId || !days) {
         return res.status(400).json({
           message:
             "Missing required parameters: courseId, teacherId, and sectionId.",
@@ -126,7 +125,7 @@ courseRoutes.get(
         courseId,
         teacherId,
         sectionId,
-        days
+        days,
       });
 
       if (!coverdTopics) {
