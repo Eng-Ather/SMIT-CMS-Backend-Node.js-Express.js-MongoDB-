@@ -107,6 +107,9 @@ adminRoutes.get("/getallteachers", async (req, res) => {
   }
 });
 
+adminRoutes.get("/addStudent", (req, res) => {
+  sendResponse(res, 201, null, true, "Working");
+});
 adminRoutes.get("/getattendance", (req, res) => {
   sendResponse(res, 201, null, true, "Working");
 });
