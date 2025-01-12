@@ -7,7 +7,6 @@ import verifyToken from "../middlewares/tokenVerification.js";
 import dotenv from "dotenv";
 import { token } from "morgan";
 dotenv.config(); // Load .env file
-
 const router = express.Router();
 
 // Route to create a new user

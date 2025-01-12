@@ -1,11 +1,9 @@
 import express from "express";
 import sendResponse from "../helpers/sendResponse.js";
 import bcrypt from "bcrypt";
-import "dotenv/config"
-import cors from "cors"
+import "dotenv/config";
 import User from "../models/userSchema.js";
 const adminRoutes = express.Router();
-adminRoutes.use(cors());
 
 adminRoutes.post("/addTeacher", async (req, res) => {
   try {
@@ -96,20 +94,18 @@ adminRoutes.post("/addTeacher", async (req, res) => {
     const savedUser = await newUser.save(); // Save the user to the database
     sendResponse(res, 201, savedUser, false, "Teacher Added Successfully");
   } catch (error) {
-    console.error("Error creating user:", error);
     sendResponse(res, 404, null, true, "Error Adding Teacher");
   }
 });
 
 adminRoutes.get("/getallteachers", async (req, res) => {
-  try { 
-    const allTeachers = await User.find({role : "teacher"})
-    sendResponse(res, 201, allTeachers, false, "Teachers Fetched Successfully")
+  try {
+    const allTeachers = await User.find({ role: "teacher" });
+    sendResponse(res, 201, allTeachers, false, "Teachers Fetched Successfully");
   } catch (error) {
-    sendResponse(res, 404, null, true, "Error Fetching All Teachers")
+    sendResponse(res, 404, null, true, "Error Fetching All Teachers");
   }
 });
-
 
 adminRoutes.get("/getattendance", (req, res) => {
   sendResponse(res, 201, null, true, "Working");
