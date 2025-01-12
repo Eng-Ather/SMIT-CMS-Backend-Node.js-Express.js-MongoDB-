@@ -5,7 +5,6 @@ import courseRoutes from "./Routes/courseRoute.js";
 import assignmentRoutes from "./Routes/assigmentRoutes.js";
 import morgan from "morgan";
 import cors from "cors";
-
 import dotenv from "dotenv";
 import adminRoutes from "./Routes/adminRoutes.js";
 dotenv.config(); // Load .env file
@@ -32,7 +31,9 @@ app.get("/", (req, res) => {
 });
 
 // app routes
-app.use("/user", router); 
+
+
+app.use("/user", router); // Mount the user routes to the /api endpoint
 app.use("/course", courseRoutes);
 app.use("/admin", adminRoutes);
 app.use("/assignment", assignmentRoutes )
