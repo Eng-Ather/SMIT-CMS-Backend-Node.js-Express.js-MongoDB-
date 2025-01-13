@@ -177,6 +177,9 @@ router.post("/create-user", async (req, res) => {
 // });
 
 // Route to login a user
+
+
+
 router.post("/login", async (req, res) => {
   try {
     const { email: currentUserEmail, password: currentUserPassword } = req.body;
