@@ -80,6 +80,20 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "teacher", "student"],
       required: true,
     },
+    // Only for students
+    fatherName: {
+      type: String,
+      required: function () {
+        return this.role === "student";
+      },
+    },
+    // Only for students
+    CNICno: {
+      type: Number,
+      required: function () {
+        return this.role === "student";
+      },
+    },
 
     // Only for students
     teacherId: {
@@ -143,14 +157,15 @@ const userSchema = new mongoose.Schema(
     days: {
       type: [String],
       required: true,
-        validate:{
-          validator: function (value){
-            if(this.role ==="student") return value.length ===1
-            if( this.role === "teacher") return value.length >=1
-            return true; // For admin or other roles, no validation
-          },
-          message: "Invalid batch: Students must have 1 batch, teachers can have multiple.",
-      }
+      validate: {
+        validator: function (value) {
+          if (this.role === "student") return value.length === 1;
+          if (this.role === "teacher") return value.length >= 1;
+          return true; // For admin or other roles, no validation
+        },
+        message:
+          "Invalid batch: Students must have 1 batch, teachers can have multiple.",
+      },
     },
 
     sectionId: {
@@ -173,5 +188,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-const User = mongoose.models.userinfo || mongoose.model("userinfo", userSchema);
+const User =
+  mongoose.models.userinfos || mongoose.model("userinfos", userSchema);
 export default User;

@@ -32,11 +32,10 @@ app.get("/", (req, res) => {
 
 // app routes
 
-
 app.use("/user", router); // Mount the user routes to the /api endpoint
 app.use("/course", courseRoutes);
 app.use("/admin", adminRoutes);
-app.use("/assignment", assignmentRoutes )
+app.use("/assignment", assignmentRoutes);
 
 app.listen(port, () => {
   console.log("Server is running on port:", port);
