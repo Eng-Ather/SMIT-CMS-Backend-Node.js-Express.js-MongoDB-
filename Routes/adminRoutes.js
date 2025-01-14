@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import "dotenv/config";
 import User from "../models/userSchema.js";
 import newCourse from "../models/courseSchema.js";
-import addStudent from "../models/addStudentSchema.js";
 const adminRoutes = express.Router();
 
 adminRoutes.post("/addTeacher", async (req, res) => {
@@ -59,7 +58,6 @@ adminRoutes.post("/addTeacher", async (req, res) => {
   }
 });
 
-
 adminRoutes.get("/getallteachers", async (req, res) => {
   try {
     const allTeachers = await User.find({ role: "teacher" });
@@ -68,7 +66,6 @@ adminRoutes.get("/getallteachers", async (req, res) => {
     sendResponse(res, 404, null, true, "Error Fetching All Teachers");
   }
 });
-
 
 adminRoutes.post("/addCourse", async (req, res) => {
   try {
@@ -86,7 +83,6 @@ adminRoutes.post("/addCourse", async (req, res) => {
   }
 });
 
-
 adminRoutes.get("/getAllCourses", async (req, res) => {
   try {
     const allCourses = await newCourse.find();
@@ -95,7 +91,6 @@ adminRoutes.get("/getAllCourses", async (req, res) => {
     sendResponse(res, 404, null, true, "Error Fetching Courses");
   }
 });
-
 
 adminRoutes.post("/addStudent", async (req, res) => {
   try {
@@ -135,7 +130,7 @@ adminRoutes.post("/addStudent", async (req, res) => {
 
     const hashpassword = bcrypt.hashSync(password, 10);
 
-    let newStudent = new addStudent({
+    let newStudent = new User({
       name,
       fatherName,
       CNICno,
@@ -153,20 +148,17 @@ adminRoutes.post("/addStudent", async (req, res) => {
     newStudent = await newStudent.save(); // Save the user to the database
     sendResponse(res, 201, newStudent, false, "Student Added Successfully");
   } catch (error) {
-    sendResponse(res, 400, null, true, "Error in Adding Student");
+    sendResponse(res, 400, null, true, error.message);
   }
 });
 
-
-adminRoutes.get("/getAllStudents", async(req, res) => {
+adminRoutes.get("/getAllStudents", async (req, res) => {
   try {
-    const allStudents = await addStudent.find()
-    sendResponse(res, 201, allStudents, false, "Students Fetched Successfully")
+    const allStudents = await User.find({role: "student"});
+    sendResponse(res, 201, allStudents, false, "Students Fetched Successfully");
   } catch (error) {
-    sendResponse(res, 400, null, true, "Error Fetching Students")
+    sendResponse(res, 400, null, true, "Error Fetching Students");
   }
 });
-
-
 
 export default adminRoutes;

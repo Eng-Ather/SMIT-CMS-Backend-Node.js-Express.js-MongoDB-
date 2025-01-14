@@ -80,6 +80,20 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "teacher", "student"],
       required: true,
     },
+    // Only for students
+    fatherName: {
+      type: String,
+      required: function () {
+        return this.role === "student";
+      },
+    },
+    // Only for students
+    CNICno: {
+      type: Number,
+      required: function () {
+        return this.role === "student";
+      },
+    },
 
     // Only for students
     teacherId: {
