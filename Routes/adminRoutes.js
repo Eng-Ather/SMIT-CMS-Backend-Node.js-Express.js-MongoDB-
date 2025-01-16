@@ -69,17 +69,34 @@ adminRoutes.get("/getallteachers", async (req, res) => {
 
 adminRoutes.post("/addCourse", async (req, res) => {
   try {
-    const { courseId, courseTitle, courseDescription, topics } = req.body;
+    const {
+      courseId,
+      courseTitle,
+      courseDescription,
+      teacherName,
+      teacherId,
+      batch,
+      sectionId,
+      days,
+      topics,
+      image,
+    } = req.body;
     let addedCourse = new newCourse({
       courseId,
       courseTitle,
       courseDescription,
+      teacherName,
+      teacherId,
+      batch,
+      sectionId,
+      days,
       topics,
+      image,
     });
     addedCourse = await addedCourse.save();
     sendResponse(res, 201, addedCourse, false, "Course Added Successfully");
   } catch (error) {
-    sendResponse(res, 404, null, true, "Error Adding Course");
+    sendResponse(res, 404, null, true, error.message);
   }
 });
 
@@ -89,6 +106,25 @@ adminRoutes.get("/getAllCourses", async (req, res) => {
     sendResponse(res, 201, allCourses, false, "Courses Fetched Successfully");
   } catch (error) {
     sendResponse(res, 404, null, true, "Error Fetching Courses");
+  }
+});
+
+adminRoutes.get("/getAllCourses/:courseId", async (req, res) => {
+  try {
+    const dynamicCourseDetail = await newCourse.findOne({
+      courseId: req.params.courseId,
+    });
+    if (!dynamicCourseDetail)
+      return sendResponse(res, 400, null, true, "Course Details Not Found");
+    sendResponse(
+      res,
+      201,
+      dynamicCourseDetail,
+      false,
+      "Data Retrieved Successfully"
+    );
+  } catch (error) {
+    sendResponse(res, 404, null, true, error.message);
   }
 });
 
@@ -154,7 +190,7 @@ adminRoutes.post("/addStudent", async (req, res) => {
 
 adminRoutes.get("/getAllStudents", async (req, res) => {
   try {
-    const allStudents = await User.find({role: "student"});
+    const allStudents = await User.find({ role: "student" });
     sendResponse(res, 201, allStudents, false, "Students Fetched Successfully");
   } catch (error) {
     sendResponse(res, 400, null, true, "Error Fetching Students");
