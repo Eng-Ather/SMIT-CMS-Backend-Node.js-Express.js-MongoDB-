@@ -17,10 +17,33 @@ const coursemodel = new mongoose.Schema(
       type: String,
       required: true,
     },
-
-    topics: { 
+    teacherName: {
+      type: String,
+      required: true,
+    },
+    teacherId: {
+      type: String,
+      required: true,
+    },
+    batch: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    sectionId: {
+      type: String,
+      required: true,
+    },
+    days: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+    },
+    topics: {
       type: [String],
-      required: true
+      required: true,
     },
   },
   {
