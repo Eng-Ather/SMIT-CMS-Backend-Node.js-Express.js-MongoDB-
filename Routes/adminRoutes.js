@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import "dotenv/config";
 import User from "../models/userSchema.js";
 import newCourse from "../models/courseSchema.js";
+import announcement from "../models/announcement.js";
 const adminRoutes = express.Router();
 
 adminRoutes.post("/addTeacher", async (req, res) => {
@@ -194,6 +195,42 @@ adminRoutes.get("/getAllStudents", async (req, res) => {
     sendResponse(res, 201, allStudents, false, "Students Fetched Successfully");
   } catch (error) {
     sendResponse(res, 400, null, true, "Error Fetching Students");
+  }
+});
+
+adminRoutes.post("/addAnnouncement", async (req, res) => {
+  try {
+    const { title, location, time, description } = req.body;
+    let newAnnouncement = new announcement({
+      title,
+      location,
+      time,
+      description,
+    });
+    newAnnouncement = await newAnnouncement.save();
+    sendResponse(
+      res,
+      200,
+      newAnnouncement,
+      false,
+      "Announcement Added Successfully"
+    );
+  } catch (error) {}
+  sendResponse(res, 404, null, true, "Error in Adding Announcement");
+});
+
+adminRoutes.get("/getAllAnnouncements", async (req, res) => {
+  try {
+    const allAnouncements = await announcement.find();
+    sendResponse(
+      res,
+      201,
+      allAnouncements,
+      false,
+      "Announcements Fetched Successfully"
+    );
+  } catch (error) {
+    sendResponse(res, 400, null, true, "Error Fetching Announcements");
   }
 });
 
