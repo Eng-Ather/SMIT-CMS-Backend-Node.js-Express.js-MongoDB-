@@ -99,12 +99,10 @@ assignmentRoutes.post("/submit-assignment", async (req, res) => {
     });
   } catch (error) {
     console.error("Error during Assigment submission:", error);
-    res
-      .status(500)
-      .json({
-        message: "Error during Assignment Submission",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Error during Assignment Submission",
+      error: error.message,
+    });
   }
 });
 
@@ -132,7 +130,10 @@ assignmentRoutes.get(
           studentId,
         });
 
-      if (!studentSubmitedAssignment || studentSubmitedAssignment.length === 0) {
+      if (
+        !studentSubmitedAssignment ||
+        studentSubmitedAssignment.length === 0
+      ) {
         return res.status(404).json({
           status: 404,
           message:
@@ -148,7 +149,8 @@ assignmentRoutes.get(
     } catch (error) {
       console.error("Error while fetching Submited assignments:", error);
       res.status(500).json({
-        message: "Internal server error occurred while fetching submited assignments.",
+        message:
+          "Internal server error occurred while fetching submited assignments.",
         error: error.message,
       });
     }
@@ -256,9 +258,7 @@ assignmentRoutes.get(
   }
 );
 
-
-
-// Route to get a leatest assignments of a specific course 
+// Route to get a leatest assignments of a specific course
 
 assignmentRoutes.get(
   "/get-leatest-assignment/:courseId/:teacherId/:sectionId/:days/:batch",
@@ -274,15 +274,16 @@ assignmentRoutes.get(
       }
 
       // Query the database for the most recent assignment based on the given parameters
-      const studentAssignment = await newAssignmentModel.findOne({
-        courseId,
-        teacherId,
-        sectionId,
-        days,
-        batch,
-      })
-      .sort({ _id: -1 }) // Sort by _id in descending order to get the last added document
-      .limit(1); // Limit to only 1 document
+      const studentAssignment = await newAssignmentModel
+        .findOne({
+          courseId,
+          teacherId,
+          sectionId,
+          days,
+          batch,
+        })
+        .sort({ _id: -1 }) // Sort by _id in descending order to get the last added document
+        .limit(1); // Limit to only 1 document
 
       if (!studentAssignment) {
         return res.status(404).json({
@@ -299,12 +300,67 @@ assignmentRoutes.get(
     } catch (error) {
       console.error("Error while fetching assignment:", error);
       res.status(500).json({
-        message: "Internal server error occurred while fetching the assignment.",
+        message:
+          "Internal server error occurred while fetching the assignment.",
         error: error.message,
       });
     }
   }
 );
 
+//Route to get Submited Assigment with Specific Assignment ID
+assignmentRoutes.get(
+  "/get-submited-assignment-for-teacher/:batch/:courseId/:sectionId/:days/:assignmentId",
+  async (req, res) => {
+    try {
+      const { batch, courseId, sectionId, days, assignmentId } = req.params; // Use req.params for route params
+
+      // Validate request parameters
+      if (!batch || !courseId || !sectionId || !days || !assignmentId) {
+        return res.status(400).json({
+          message: "Missing required parameters",
+        });
+      }
+
+      // Query the database for assignments
+      const studentSubmitedAssignment =
+        await recentlySubmitedAssignmentModel.find({
+          batch,
+          courseId,
+          sectionId,
+          days,
+          assignmentId,
+        });
+
+      if (
+        !studentSubmitedAssignment ||
+        studentSubmitedAssignment.length === 0
+      ) {
+        console.log("studentSubmitedAssignment", studentSubmitedAssignment);
+
+        return 
+        
+        res.status(404).json({
+          status: 404,
+          message:
+            "No data found ",
+        });
+      }
+
+      res.status(200).json({
+        status: 200,
+        message: "Data retrieved successfully.",
+        data: studentSubmitedAssignment,
+      });
+    } catch (error) {
+      console.error("Error while fetching Submited assignments:", error);
+      res.status(500).json({
+        message:
+          "Internal server error occurred while fetching submited assignments.",
+        error: error.message,
+      });
+    }
+  }
+);
 
 export default assignmentRoutes;
