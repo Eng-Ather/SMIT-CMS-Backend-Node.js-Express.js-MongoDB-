@@ -200,10 +200,11 @@ adminRoutes.get("/getAllStudents", async (req, res) => {
 
 adminRoutes.post("/addAnnouncement", async (req, res) => {
   try {
-    const { title, location, time, description } = req.body;
+    const { title, location, date, time, description } = req.body;
     let newAnnouncement = new announcement({
       title,
       location,
+      date,
       time,
       description,
     });
@@ -215,8 +216,9 @@ adminRoutes.post("/addAnnouncement", async (req, res) => {
       false,
       "Announcement Added Successfully"
     );
-  } catch (error) {}
-  sendResponse(res, 404, null, true, "Error in Adding Announcement");
+  } catch (error) {
+    sendResponse(res, 404, null, true, "Error in Adding Announcement");
+  }
 });
 
 adminRoutes.get("/getAllAnnouncements", async (req, res) => {
