@@ -48,7 +48,11 @@ courseRoutes.get("/course-outline/:courseId", async (req, res) => {
 
     if (!courseData) {
       //if course data doesnot exist
-      res.status(404).json({
+      // res.status(404).json({
+      //   message: "Course not found",
+      //   status: "404",
+      // });
+      return res.status(404).json({
         message: "Course not found",
         status: "404",
       });

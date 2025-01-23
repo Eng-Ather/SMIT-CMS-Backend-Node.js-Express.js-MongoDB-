@@ -215,8 +215,9 @@ adminRoutes.post("/addAnnouncement", async (req, res) => {
       false,
       "Announcement Added Successfully"
     );
-  } catch (error) {}
-  sendResponse(res, 404, null, true, "Error in Adding Announcement");
+  } catch (error) {
+    sendResponse(res, 404, null, true, "Error in Adding Announcement");
+  }
 });
 
 adminRoutes.get("/getAllAnnouncements", async (req, res) => {
