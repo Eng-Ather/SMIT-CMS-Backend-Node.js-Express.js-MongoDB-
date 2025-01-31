@@ -200,10 +200,11 @@ adminRoutes.get("/getAllStudents", async (req, res) => {
 
 adminRoutes.post("/addAnnouncement", async (req, res) => {
   try {
-    const { title, location, time, description } = req.body;
+    const { title, location, date, time, description } = req.body;
     let newAnnouncement = new announcement({
       title,
       location,
+      date,
       time,
       description,
     });
